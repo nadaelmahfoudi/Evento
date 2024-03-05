@@ -2,19 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use Carbon\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
-class RoleSeeder extends Seeder
+class CategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Role::create(['name' => 'spectator']);
-        Role::create(['name' => 'admin']);
-        Role::create(['name' => 'organizer']);
+        Category::factory(10)->create();
     }
 }
