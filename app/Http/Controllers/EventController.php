@@ -70,7 +70,7 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $annonce)
+    public function show(Event $event)
     {
         return view('admin.events.show',compact('event'));
     }
@@ -126,7 +126,7 @@ class EventController extends Controller
 
     public function showWelcome()
     {
-        $events = Event::where('accepted',true)->latest()->paginate(5); 
+        $events = Event::where('accepted', true)->latest()->paginate(2); 
         return view('welcome', compact('events'));
     }
 

@@ -39,4 +39,5 @@ Route::get('/dashboard', [CategoryController::class, 'index'])->middleware(['aut
 Route::post('/events/{event}/reserve', [ReservationController::class, 'reserve'])->name('reservation.reserve');
 Route::get('/reservations/{reservation}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
 Route::get('/events/{event}/accept', [EventController::class, 'accept'])->name('events.accept');
+Route::post('/events/{event}', [EventController::class, 'show'])->name('events.show');
 require __DIR__.'/auth.php';

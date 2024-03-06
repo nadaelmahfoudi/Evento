@@ -73,10 +73,14 @@
                 <p class="text-gray-500 dark:text-gray-400">No categories associated</p>
             @endif
 
-            {{-- Formulaire pour postuler --}}
             <form method="POST" action="{{ route('reservation.reserve', $event->id) }}" enctype="multipart/form-data">
                 @csrf
                 <input type="submit" value="Book Now" class="mt-4 px-4 py-2 bg-blue rounded-md">
+            </form>
+
+            <form method="POST" action="{{ route('events.show', $event->id) }}" enctype="multipart/form-data">
+                @csrf
+                <input type="submit" value="Read More" class="mt-4 px-4 py-2 bg-blue rounded-md">
             </form>
 
         </div>
@@ -87,6 +91,7 @@
                        
 
             </div>
+            {{ $events->links() }}
             
         </div>
     </body>
