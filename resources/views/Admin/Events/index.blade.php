@@ -161,6 +161,7 @@
             <th class="py-2 px-4 border-b">Description</th>
             <th class="py-2 px-4 border-b">Date</th>
             <th class="py-2 px-4 border-b">Lieu</th>
+            <th class="py-2 px-4 border-b">Image</th>
             <th class="py-2 px-4 border-b">Methode de validation</th>
             <th class="py-2 px-4 border-b">Nom de Category</th>
             <th class="py-2 px-4 border-b">Capacity</th>
@@ -178,6 +179,13 @@
             <td class="py-2 px-4 border-b">{{ $event->description }}</td>
             <td class="py-2 px-4 border-b">{{ $event->date }}</td>
             <td class="py-2 px-4 border-b">{{ $event->lieu }}</td>
+            <td class="py-2 px-4 border-b">
+                @if ($event->image)
+                    <img src="{{ asset('storage/' . $event->image) }}" alt="Event Image">
+                @else
+                    <p>No image available</p>
+                @endif
+            </td>
             <td class="py-2 px-4 border-b">{{ $event->validation }}</td>
             <td class="py-2 px-4 border-b">
                 @if ($event->category)
@@ -212,6 +220,12 @@
 
 
             </td>
+            <td class="py-2 px-4 border-b">
+    @if (!$event->accepted)
+        <a href="{{ route('events.accept', $event->id) }}" class="btn btn-success bg-green-600 py-2 px-4 rounded">Accept</a>
+    @endif
+</td>
+
         </tr>
     @endforeach
 </tbody>

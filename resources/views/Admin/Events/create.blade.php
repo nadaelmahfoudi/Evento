@@ -27,7 +27,7 @@
         </div>
         @endif
 
-        <form action="{{ route('events.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form action="{{ route('events.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" enctype="multipart/form-data" >
             @csrf
 
             <div class="mb-4">
@@ -48,6 +48,11 @@
             <div class="mb-4">
                 <label for="lieu" class="block text-gray-700 text-sm font-bold mb-2">lieu:</label>
                 <input type="text" name="lieu" id="lieu" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="lieu">
+            </div>
+
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image:</label>
+                <input type="file" name="image" id="image" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
 
             <select name="validation">

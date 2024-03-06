@@ -53,6 +53,12 @@ class EventController extends Controller
         $validatedData = $request->validated();
         $validatedData['user_id'] = Auth::id();
         
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('events_images', 'public');
+    
+            $validatedData['image'] = $imagePath;
+        }
+        
         $validatedData['validation'] = $request->input('validation');
         
         $event = Event::create($validatedData);
@@ -120,9 +126,17 @@ class EventController extends Controller
 
     public function showWelcome()
     {
-        $events = Event::latest()->paginate(5); 
+        $events = Event::where('accepted',true)->latest()->paginate(5); 
         return view('welcome', compact('events'));
     }
+
+    public function accept(Event $event)
+{
+    $event->update(['accepted' => true]);
+
+    return redirect()->back()->with('success', 'Event accepted successfully.');
+}
+
 
     
 }
