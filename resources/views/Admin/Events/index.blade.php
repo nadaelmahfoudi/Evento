@@ -156,6 +156,7 @@
             <th class="py-2 px-4 border-b">Description</th>
             <th class="py-2 px-4 border-b">Date</th>
             <th class="py-2 px-4 border-b">Lieu</th>
+            <th class="py-2 px-4 border-b">Methode de validation</th>
             <th class="py-2 px-4 border-b">Nom de Category</th>
             <th class="py-2 px-4 border-b">Capacity</th>
             <th class="py-2 px-4 border-b" width="280px">Action</th>
@@ -172,6 +173,7 @@
         <td class="py-2 px-4 border-b">{{ $event->description }}</td>
         <td class="py-2 px-4 border-b">{{ $event->date }}</td>
         <td class="py-2 px-4 border-b">{{ $event->lieu }}</td>
+        <td class="py-2 px-4 border-b">{{ $event->validation}}</td>
         <td class="py-2 px-4 border-b">
             @if ($event->category)
                 {{ $event->category->name }}

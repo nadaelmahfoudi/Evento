@@ -28,7 +28,7 @@ class EventRequest extends FormRequest
             'capacity' => 'required|integer|min:1',
             'category_id' => 'required|exists:categorys,id',
             'lieu' => 'required|string',
-            
+            'validation' => 'required|in:automatique,manuelle', 
         ];
     }
 }

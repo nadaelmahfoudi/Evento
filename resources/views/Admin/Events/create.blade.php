@@ -50,6 +50,12 @@
                 <input type="text" name="lieu" id="lieu" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="lieu">
             </div>
 
+            <select name="validation">
+                <option value="automatique">Validation automatique</option>
+                <option value="manuelle">Validation manuelle</option>
+            </select>
+
+
             <div class="mb-3">
                 <label for="category_id" class="form-label">category_id:</label>
                 <select name="category_id" class="form-select">

@@ -44,11 +44,14 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        $event = Event::create($request->validated());
-
+        $validatedData = $request->validated();
+        
+        $validatedData['validation'] = $request->input('validation');
+        
+        $event = Event::create($validatedData);
     
         return redirect()->route('events.index')
-                        ->with('success', 'Company created successfully.');
+                        ->with('success', 'Événement créé avec succès.');
     }
 
     /**
@@ -107,11 +110,11 @@ class EventController extends Controller
         return view('events.index', compact('events'));
     }
 
-    // public function showWelcome()
-    // {
-    //     $annonces = Annonce::latest()->paginate(5); 
-    //     return view('welcome', compact('annonces'));
-    // }
+    public function showWelcome()
+    {
+        $events = Event::latest()->paginate(5); 
+        return view('welcome', compact('events'));
+    }
 
     
 }

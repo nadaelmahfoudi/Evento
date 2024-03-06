@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('capacity')->nullable(false);
             $table->string('image');
             $table->enum('validation', ['automatique', 'manuelle'])->default('automatique');
+            $table->boolean('accepted')->default(false);
             $table->foreignId('category_id')->constrained('categorys')->onDelete('cascade');
             $table->timestamps();
         });
