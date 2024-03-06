@@ -22,21 +22,43 @@ class ReservationController extends Controller
                 return redirect()->back()->with('error', 'Désolé, la capacité maximale pour cet événement est déjà atteinte !');
             }
     
+            $reservation = new Reservation();
+            $reservation->user_id = $user->id;
+            $reservation->event_id = $eventId;
+
             if ($event->validation === 'automatique') {
-                $reservation = new Reservation();
-                $reservation->user_id = $user->id;
-                $reservation->event_id = $eventId;
-                $reservation->save();
-    
-                $event->decrement('capacity');
-    
-                return redirect()->back()->with('success', 'Votre réservation a été effectuée avec succès !');
+                $reservation->status = 'acceptée';
             } else {
-                return redirect()->back()->with('error', 'La validation de cet événement est en attente. Veuillez attendre ou contacter l\'organisateur pour plus d\'informations.');
+                $reservation->status = 'en_attente';
             }
+    
+            $reservation->save();
+            $event->decrement('capacity');
+    
+            return redirect()->back()->with('success', 'Votre réservation a été effectuée avec succès !');
         } else {
             return redirect()->route('login')->with('error', 'Veuillez vous connecter pour réserver cet événement.');
         }
     }
+
+    public function updateStatus(Request $request, $reservationId) {
+        
+        $reservation = Reservation::findOrFail($reservationId);
+    
+        if ($reservation->event->user_id !== Auth::id()) {
+            return redirect()->back()->with('error', 'Vous n\'avez pas les autorisations nécessaires pour effectuer cette action.');
+        }
+    
+        $request->validate([
+            'status' => 'required|in:acceptée,rejetée',
+        ]);
+    
+        $reservation->status = $request->input('status');
+        $reservation->save();
+    
+        return redirect()->back()->with('success', 'Le statut de la réservation a été mis à jour avec succès.');
+    }
+    
+    
     
 }

@@ -37,5 +37,6 @@ Route::resource('categorys', CategoryController::class);
 Route::resource('events', EventController::class);
 Route::get('/dashboard', [CategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('/events/{event}/reserve', [ReservationController::class, 'reserve'])->name('reservation.reserve');
+Route::get('/reservations/{reservation}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
 
 require __DIR__.'/auth.php';

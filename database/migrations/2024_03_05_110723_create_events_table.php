@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('validation', ['automatique', 'manuelle'])->default('automatique');
             $table->boolean('accepted')->default(false);
             $table->foreignId('category_id')->constrained('categorys')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

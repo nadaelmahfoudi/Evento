@@ -26,6 +26,11 @@
                     <p>{{ $message }}</p>
                 </div>
             @endif
+            @if ($message = Session::get('error'))
+                <div class="alert alert-error">
+                    <p>{{ $message }}</p>
+                </div>
+            @endif
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -163,41 +168,54 @@
         </tr>
     </thead>
     <tbody>
-        @php
-            $i = 0;
-        @endphp
-        @foreach ($events as $event)
-    <tr>
-        <td class="py-2 px-4 border-b">{{ ++$i }}</td>
-        <td class="py-2 px-4 border-b">{{ $event->titre }}</td>
-        <td class="py-2 px-4 border-b">{{ $event->description }}</td>
-        <td class="py-2 px-4 border-b">{{ $event->date }}</td>
-        <td class="py-2 px-4 border-b">{{ $event->lieu }}</td>
-        <td class="py-2 px-4 border-b">{{ $event->validation}}</td>
-        <td class="py-2 px-4 border-b">
-            @if ($event->category)
-                {{ $event->category->name }}
-            @else
-                <span class="text-red-500">No category associated</span>
-            @endif
-        </td>
-        <td class="py-2 px-4 border-b">{{ $event->capacity }}</td>
+    @php
+        $i = 0;
+    @endphp
+    @foreach ($events as $event)
+        <tr>
+            <td class="py-2 px-4 border-b">{{ ++$i }}</td>
+            <td class="py-2 px-4 border-b">{{ $event->titre }}</td>
+            <td class="py-2 px-4 border-b">{{ $event->description }}</td>
+            <td class="py-2 px-4 border-b">{{ $event->date }}</td>
+            <td class="py-2 px-4 border-b">{{ $event->lieu }}</td>
+            <td class="py-2 px-4 border-b">{{ $event->validation }}</td>
+            <td class="py-2 px-4 border-b">
+                @if ($event->category)
+                    {{ $event->category->name }}
+                @else
+                    <span class="text-red-500">No category associated</span>
+                @endif
+            </td>
+            <td class="py-2 px-4 border-b">{{ $event->capacity }}</td>
+            <td class="py-2 px-4 border-b">
+                <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="flex">
+                    <a class="btn btn-info mr-2 bg-orange-400 py-2 px-4 rounded" href="{{ route('events.show', $event->id) }}">Show</a>
+                    <a class="btn btn-primary mr-2 bg-blue-700 py-2 px-4 rounded" href="{{ route('events.edit', $event->id) }}">Edit</a>
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger bg-red-700 py-2 px-4 rounded">Delete</button>
+                </form>
+            </td>
+            <td class="py-2 px-4 border-b">
+            @if ($event->reservations->isEmpty())
+    <p>Aucune réservation en attente pour cet événement.</p>
+@else
+    @foreach ($event->reservations as $reservation)
+        <div class="reservation">
+            <p>{{ $reservation->user->name }} a réservé pour l'événement "{{ $reservation->event->titre }}"</p>
+            <a href="{{ route('reservations.updateStatus', ['reservation' => $reservation->id, 'status' => 'acceptée']) }}" class="btn btn-success">Accepter</a>
+            <a href="{{ route('reservations.updateStatus', ['reservation' => $reservation->id, 'status' => 'rejetée']) }}" class="btn btn-danger">Rejeter</a>
+        </div>
+    @endforeach
+@endif
 
 
 
-        <td class="py-2 px-4 border-b">
-            <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="flex">
-                <a class="btn btn-info mr-2 bg-orange-400 py-2 px-4 rounded" href="{{ route('events.show', $event->id) }}">Show</a>
-                <a class="btn btn-primary mr-2 bg-blue-700 py-2 px-4 rounded" href="{{ route('events.edit', $event->id) }}">Edit</a>
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger bg-red-700 py-2 px-4 rounded">Delete</button>
-            </form>
-        </td>
-    </tr>
-@endforeach
+            </td>
+        </tr>
+    @endforeach
+</tbody>
 
-    </tbody>
 </table>
 
     

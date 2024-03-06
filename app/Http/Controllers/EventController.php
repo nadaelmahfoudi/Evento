@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use App\Models\Category;
+use App\Models\Reservation;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -22,6 +24,10 @@ class EventController extends Controller
         //     $users = User::whereIn('id', $applications->pluck('user_id'))->get(['id', 'name']);
         //     $annonce->postulants = $users;
         // }
+
+        foreach ($events as $event) {
+            $event->reservations = $event->reservations()->where('status', 'en_attente')->get();
+        }
     
         return view('admin.events.index', compact('events'))
                     ->with('i', (request()->input('page', 1) - 1) * 5);
@@ -45,6 +51,7 @@ class EventController extends Controller
     public function store(EventRequest $request)
     {
         $validatedData = $request->validated();
+        $validatedData['user_id'] = Auth::id();
         
         $validatedData['validation'] = $request->input('validation');
         
@@ -107,7 +114,8 @@ class EventController extends Controller
     public function showDashboard()
     {
         $events = Event::all(); 
-        return view('events.index', compact('events'));
+        $reservations = Reservation::all();
+        return view('events.index', compact('events', 'reservations'));
     }
 
     public function showWelcome()

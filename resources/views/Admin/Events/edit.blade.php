@@ -51,20 +51,25 @@
                 <input type="text" name="lieu" id="lieu" value="{{ $event->lieu }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="lieu">
             </div>
 
-            <div class="mb-4">
-                <label for="category" class="block text-gray-700 text-sm font-bold mb-2">category:</label>
-                <input type="text" name="category" id="category" value="{{ $event->category }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="category">
-            </div>
+
 
             <div class="mb-3">
-                <label for="entreprise_id" class="block text-gray-700 text-sm font-bold mb-2">Entreprise ID:</label>
-                <select name="entreprise_id" class="form-select">
+                <label for="category_id" class="block text-gray-700 text-sm font-bold mb-2">Category :</label>
+                <select name="category_id" class="form-select">
                     <option value=""></option>
                     @foreach($categorys as $categoryOption)
                         <option value="{{ $categoryOption->id }}" {{ $categoryOption->id == $event->category_id ? 'selected' : '' }}>
                             {{ $categoryOption->name }}
                         </option>
                     @endforeach
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="validation" class="block text-gray-700 text-sm font-bold mb-2">Validation:</label>
+                <select name="validation" id="validation" class="form-select">
+                    <option value="automatique" {{ $event->validation === 'automatique' ? 'selected' : '' }}>Validation automatique</option>
+                    <option value="manuelle" {{ $event->validation === 'manuelle' ? 'selected' : '' }}>Validation manuelle</option>
                 </select>
             </div>
 
