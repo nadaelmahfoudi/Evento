@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+Route::get('/', [EventController::class, 'showWelcome'])->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,10 +32,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 Route::resource('categorys', CategoryController::class);
 Route::resource('events', EventController::class);
-// Route::get('/dashboard', [CategoryController::class, 'showDashboard'])->name('dashboard');
 Route::get('/dashboard', [CategoryController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::post('/events/{event}/reserve', [ReservationController::class, 'reserve'])->name('reservation.reserve');
 
 require __DIR__.'/auth.php';
-
