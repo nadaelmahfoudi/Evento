@@ -11,7 +11,7 @@ class Event extends Model
     protected $fillable = ['titre', 'description', 'lieu', 'date', 'capacity', 'image', 'validation', 'accepted', 'category_id' , 'user_id'];
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function reservations()

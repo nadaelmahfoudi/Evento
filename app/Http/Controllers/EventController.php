@@ -127,7 +127,8 @@ class EventController extends Controller
     public function showWelcome()
     {
         $events = Event::where('accepted', true)->latest()->paginate(2); 
-        return view('welcome', compact('events'));
+        $categorys = Category::all();
+        return view('welcome', compact('events', 'categorys'));
     }
 
     public function accept(Event $event)
@@ -144,6 +145,16 @@ public function search(Request $request)
     $events = Event::where('titre', 'like', '%' . $query . '%')->get();
     return response()->json($events);
 }
+
+public function filterByCategory(Request $request)
+{
+    $categoryId = $request->category_id;
+    $events = Event::with('category')->where('category_id', $categoryId)->where('accepted', true)->get();
+    if ($events->count() > 0) 
+        return response()->json($events);
+    return response()->json([]);
+}
+
 
     
 }

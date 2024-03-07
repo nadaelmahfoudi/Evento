@@ -41,4 +41,7 @@ Route::get('/reservations/{reservation}/update-status', [ReservationController::
 Route::get('/events/{event}/accept', [EventController::class, 'accept'])->name('events.accept');
 Route::post('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/search', [EventController::class, 'search'])->name('events.search');
+
+Route::get('filter', [EventController::class, 'filterByCategory']);
+
 require __DIR__.'/auth.php';
