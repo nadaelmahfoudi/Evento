@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\StatistiqueController;
+use App\Http\Controllers\TicketController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
@@ -24,9 +25,7 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::get('/', [EventController::class, 'showWelcome'])->name('welcome');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {return view('dashboard');})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -44,5 +43,6 @@ Route::post('/events/{event}', [EventController::class, 'show'])->name('events.s
 Route::get('/search', [EventController::class, 'search'])->name('events.search');
 Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
 Route::get('filter', [EventController::class, 'filterByCategory']);
-
+Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.ticket');
+ 
 require __DIR__.'/auth.php';

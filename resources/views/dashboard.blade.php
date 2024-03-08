@@ -5,6 +5,9 @@
             <div class="pull-right">
                 <a class="btn  " href="{{ route('events.index') }}"> EVENTS</a>
             </div>
+            <div class="pull-right">
+                <a class="btn  " href="{{ route('tickets.ticket') }}"> Tickets</a>
+            </div>
             
         </h2>
     </x-slot>
