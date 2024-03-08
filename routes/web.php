@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\StatistiqueController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +42,7 @@ Route::get('/reservations/{reservation}/update-status', [ReservationController::
 Route::get('/events/{event}/accept', [EventController::class, 'accept'])->name('events.accept');
 Route::post('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/search', [EventController::class, 'search'])->name('events.search');
-
+Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
 Route::get('filter', [EventController::class, 'filterByCategory']);
 
 require __DIR__.'/auth.php';
