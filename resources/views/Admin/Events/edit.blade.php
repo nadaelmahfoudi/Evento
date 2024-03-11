@@ -51,7 +51,10 @@
                 <input type="text" name="lieu" id="lieu" value="{{ $event->lieu }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="lieu">
             </div>
 
-
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image:</label>
+                <input type="file" name="image" id="image" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
 
             <div class="mb-3">
                 <label for="category_id" class="block text-gray-700 text-sm font-bold mb-2">Category :</label>
