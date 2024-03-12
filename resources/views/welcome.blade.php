@@ -54,12 +54,7 @@
                         <p>{{ $message }}</p>
                     </div>
                 @endif
-                <div class="mt-6">
-                    <form id="searchForm" action="{{ route('events.search') }}" method="GET">
-                        <input type="text" id="searchInput" name="query" placeholder="Search...">
-                        <button type="submit">Search</button>
-                    </form>
-                </div>
+
 
 
                 <form class="max-w-md mx-auto">   
@@ -70,7 +65,7 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                             </svg>
                         </div>
-                        <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
+                        <input type="search" id="search_title" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
                         <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="background-color : #1d4ed8">Search</button>
                     </div>
                 </form>
@@ -78,7 +73,7 @@
 
                 
                 <form class="max-w-sm mx-auto mt-4">
-                <select id="category_select" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select id="categories" name="category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option selected>Choose a category</option>
                     @foreach ($categorys as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -87,62 +82,12 @@
                 </form>
 
 
-
-
-
-                <div id="categoryFilterForm">
-                    <label for="category_select">Catégorie :</label>
-                    <select id="category_select" name="category">
-                        <option value="">Toutes les catégories</option>
-                        @foreach ($categorys as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                    <button type="submit">Filtrer</button>
-            </div>
-
             <div class="flex justify-center ">
                     <h1 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">Latest Events</h1>
                 </div>
             <div id="searchResults" class="mt-16">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-        @foreach ($events as $event)
-        <a href="https://laravel.com/docs" class="block rounded-lg p-4 shadow-sm shadow-indigo-100">
-            <img alt="" src="{{ asset('storage/' . $event->image )}}" class="h-56 w-full rounded-md object-cover" />
-
-            <div class="mt-2">
-                <dl>
-                    <div>
-                        <dt class="sr-only">Price</dt>
-                        <dd class="text-sm text-gray-500">{{ $event->Title }}</dd>
-                    </div>
-
-                    <div>
-                        <dt class="sr-only">Address</dt>
-                        <dd class="font-medium">{{ $event->lieu }}</dd>
-                    </div>
-                    
-                    <div>
-                        <dt class="sr-only">Category</dt>
-                        <dd class="font-medium">{{ $event->category ? $event->category->name : 'No category' }}</dd>
-                    </div>
-                </dl>
-
-                
-            </div>
-
-            <div class="mt-4 flex justify-between">
-                <form method="POST" action="{{ route('reservation.reserve', $event->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    <input type="submit" value="Book Now" class="px-4 py-2 bg-blue rounded-md">
-                </form>
-                <form method="POST" action="{{ route('events.show', $event->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    <input type="submit" value="Read More" class="px-4 py-2 bg-blue rounded-md">
-                </form>
-            </div>
-        </a>
-        @endforeach
+    <div id="events" class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        @include('pagination')
     </div>
 </div>
 
@@ -151,115 +96,41 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#searchForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: 'GET',
-                url: '/search',
-                
-                headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-                data: formData,
-                success: function(response) {
-                    $('#searchResults').empty();
-                    
-                    response.forEach(function(event) {
-                        var eventHtml = `
-                            <a href="https://laravel.com/docs" class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                                <div>
-                                    <div class="h-16 w-16 bg-red-50 dark:bg-red-800/20 flex items-center justify-center rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-7 h-7 stroke-red-500">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                                        </svg>
-                                    </div>
-                                    <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">${event.titre}</h2>
-                                    <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">${event.description}</p>
-                                    <form method="POST" action="{{ route('reservation.reserve', $event->id) }}" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="submit" value="Book Now" class="mt-4 px-4 py-2 bg-blue rounded-md">
-                                    </form>
-
-                                    <form method="POST" action="{{ route('events.show', $event->id) }}" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="submit" value="Read More" class="mt-4 px-4 py-2 bg-blue rounded-md">
-                                    </form>
-                                            </div>
-                                        </a>
-                        `;
-                        $('#searchResults').append(eventHtml);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
+        $(document).ready(function() {
+            $('#search_title').on('keyup', function() {
+                fetchEvents(1);
             });
-        });
-    
-        $('#category_select').on("change",function(event) {
-            event.preventDefault();
-            var category = $(this).val();
-          
-            console.log(category)
-            $.ajax({
-                type: 'GET',
-                url: 'filter',
-                data : {
-                    category_id : category
-                }
-                ,
-                    headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
-            },
-            success: function(response) {
-    $('#searchResults').empty();
-    
-    response.forEach(function(event) {
-        console.log(event);
-        var eventHtml = `
-            <div class="block rounded-lg p-4 shadow-sm shadow-indigo-100">
-                <img alt="" src="{{ asset('storage/' . $event->image )}}" class="h-56 w-full rounded-md object-cover" />
-                <div class="mt-2">
-                    <dl>
-                        <div>
-                            <dt class="sr-only">Price</dt>
-                            <dd class="text-sm text-gray-500">${event.Title}</dd>
-                        </div>
-                        <div>
-                            <dt class="sr-only">Address</dt>
-                            <dd class="font-medium">${event.lieu}</dd>
-                        </div>
-                        <div>
-                            <dt class="sr-only">Category</dt>
-                            <dd class="font-medium">${event.category ? event.category.name : 'No category'}</dd>
-                        </div>
-                    </dl>
-                </div>
-                <div class="mt-4 flex justify-between">
-                    <form method="POST" action="/reservation/reserve" enctype="multipart/form-data">
-                        <input type="hidden" name="eventId" value="${event.id}">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input type="submit" value="Book Now" class="px-4 py-2 bg-blue rounded-md">
-                    </form>
-                    <form method="GET" action="/events/show/${event.id}" enctype="multipart/form-data">
-                        <input type="submit" value="Read More" class="px-4 py-2 bg-blue rounded-md">
-                    </form>
-                </div>
-            </div>
-        `;
-        $('#searchResults').append(eventHtml);
-    });
-},
 
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
+            $('#categories').on('change', function() {
+                fetchEvents(1);
             });
+
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                fetchEvents(page);
+            });
+
+            function fetchEvents(page) {
+                var keyword = $('#search_title').val().trim();
+                var category = $('#categories').val();
+                if (category === 'all') {
+                    category = '';
+                }
+                $.ajax({
+                    url: '/search',
+                    data: {
+                        page: page,
+                        keyword: keyword,
+                        category: category
+                    },
+                    success: function(data) {
+                        $('#events').html(data);
+                    }
+                });
+            }
         });
-    });
-</script>
+    </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 

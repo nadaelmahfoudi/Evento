@@ -156,11 +156,25 @@ class EventController extends Controller
 }
 
 
-public function search(Request $request)
-{
-    $query = $request->input('query');
-    $events = Event::where('titre', 'like', '%' . $query . '%')->get();
-    return response()->json($events);
+public function search(Request $request){
+    // dd($request);
+    $keyword = $request->input('keyword');
+        $category = $request->input('category');
+
+        $events = Event::when($keyword, function ($query) use ($keyword) {
+            return $query->where('title', 'like', '%' . $keyword . '%');
+        })
+            ->when($category, function ($query) use ($category) {
+                return $query->where('category_id', $category);
+            })
+            ->paginate(9);
+
+
+    if ($request->ajax()) {
+        return view('pagination', compact('events'))->render();
+    }
+
+    return view('welcome', compact('events'));
 }
 
 public function filterByCategory(Request $request)
