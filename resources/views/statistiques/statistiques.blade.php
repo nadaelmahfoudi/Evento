@@ -2,27 +2,34 @@
 
 @section('content')
     <div class="container">
-        <h1>Statistiques</h1>
+    @if (Auth::user()->HasRole('admin'))
+        <h1 class="text-3xl font-bold mb-4">Statistiques</h1>
 
-        <h2>Nombre total d'événements par catégorie :</h2>
-        <ul>
-            @foreach ($eventsByCategory as $event)
-                <li>{{ $event->category_name }}: {{ $event->total }}</li>
-            @endforeach
-        </ul>
+        <div class="bg-gray-200 p-4 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-2">Nombre total d'utilisateurs :</h2>
+            <p class="text-lg">{{ $totalUsers }}</p>
+        </div>
 
-        <h2>Nombre total de réservations par événement :</h2>
-        <ul>
-        @foreach ($reservationsPerEvent as $reservation)
-            <li>Événement {{ $reservation->titre }}: {{ $reservation->total }}</li>
-        @endforeach
-        </ul>
+        <div class="bg-gray-200 p-4 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-2">Nombre total d'événements :</h2>
+            <p class="text-lg">{{ $totalEvents }}</p>
+        </div>
 
-        <h2>Nombre total de réservations par statut :</h2>
-        <ul>
-            @foreach ($reservationsByStatus as $reservation)
-                <li>Statut {{ $reservation->status }}: {{ $reservation->total }}</li>
-            @endforeach
-        </ul>
+        <div class="bg-gray-200 p-4 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-2">Nombre total de catégories :</h2>
+            <p class="text-lg">{{ $totalCategories }}</p>
+        </div>
+
+        <div class="bg-gray-200 p-4 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-2">Nombre total de réservations :</h2>
+            <p class="text-lg">{{ $totalReservations }}</p>
+        </div>
+        @endif
+        @if (Auth::user()->HasRole('organizer'))
+        <div class="bg-gray-200 p-4 rounded-lg mb-4">
+            <h2 class="text-xl font-semibold mb-2">Nombre total de réservations pour les événements de l'organisateur :</h2>
+            <p class="text-lg">{{ $totalReservationsByOrganizer }}</p>
+        </div>
+        @endif
     </div>
 @endsection

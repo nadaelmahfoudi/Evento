@@ -15,23 +15,23 @@ class EventController extends Controller
   /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
-        $events = Event::latest()->paginate(5);
+        $user = Auth::user();
     
-        // foreach ($annonces as $annonce) {
-        //     $applications = JobDatingApplication::where('job_dating_offer_id', $annonce->id)->get();
-        //     $users = User::whereIn('id', $applications->pluck('user_id'))->get(['id', 'name']);
-        //     $annonce->postulants = $users;
-        // }
-
-        foreach ($events as $event) {
-            $event->reservations = $event->reservations()->where('status', 'en_attente')->get();
+        // Vérifier si l'utilisateur a le rôle d'administrateur
+        if ($user->hasRole('admin')) {
+            // Si l'utilisateur est administrateur, récupérer tous les événements sans pagination
+            $events = Event::with('reservations')->get();
+        } else {
+            // Sinon, récupérer les événements associés à l'utilisateur authentifié avec pagination
+            $events = $user->events()->with('reservations')->paginate(5);
         }
     
-        return view('admin.events.index', compact('events'))
-                    ->with('i', (request()->input('page', 1) - 1) * 5);
+        return view('admin.events.index', compact('events'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -98,12 +98,28 @@ class EventController extends Controller
      */
     public function update(EventRequest $request, Event $event)
     {
-
+       
+        $validatedData = $request->validated();
         
-        $event->update($request->validated());
+    
+        if ($request->hasFile('image')) {
+           
+            $imagePath = $request->file('image')->store('events_images', 'public');
+    
+            $validatedData['image'] = $imagePath;
+            
+           
+            $event->image = $imagePath;
+        }
+    
+    
+        $event->update($validatedData);
+    
+        
         return redirect()->route('events.index')
-                        ->with('success','Company updated successfully');
+                         ->with('success', 'Event updated successfully');
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -119,6 +135,7 @@ class EventController extends Controller
 
     public function showDashboard()
     {
+        
         $events = Event::all(); 
         $reservations = Reservation::all();
         return view('events.index', compact('events', 'reservations'));

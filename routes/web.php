@@ -39,7 +39,7 @@ Route::get('/dashboard', [CategoryController::class, 'index'])->middleware(['aut
 Route::post('/events/{event}/reserve', [ReservationController::class, 'reserve'])->name('reservation.reserve');
 Route::get('/reservations/{reservation}/update-status', [ReservationController::class, 'updateStatus'])->name('reservations.updateStatus');
 Route::get('/events/{event}/accept', [EventController::class, 'accept'])->name('events.accept');
-Route::post('/events/{event}', [EventController::class, 'show'])->name('events.show');
+// Route::post('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::get('/search', [EventController::class, 'search'])->name('events.search');
 Route::get('/statistiques', [StatistiqueController::class, 'index'])->name('statistiques.index');
 Route::get('filter', [EventController::class, 'filterByCategory']);

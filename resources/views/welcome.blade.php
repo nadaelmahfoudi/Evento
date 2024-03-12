@@ -11,6 +11,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
 
         <!-- Styles -->
         <style>
@@ -22,7 +23,9 @@
             @if (Route::has('login'))
                 <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
                     @auth
-                        <a href="{{ url('/dashboard') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+                        <a href="/statistiques" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
+
+                        
                     @else
                         <a href="{{ route('login') }}" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</a>
 
@@ -34,9 +37,13 @@
             @endif
 
             <div class="max-w-7xl mx-auto p-6 lg:p-8">
-                <div class="flex justify-center ">
-                    <h1 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">YouTalent</h1>
+            <h1 class="mt-6 text-2xl font-bold text-center pb-3 text-gray-900 dark:text-white" style="font-family: Arial, sans-serif; color: #333333; font-size: 1.5rem; font-weight: 600; text-align: center; padding-bottom: 0.75rem;">EVENTO</h1>
+                <div class="flex justify-center">
+                    <div><img src="{{asset('images/bggg.png')}}" alt="Description de l'image" class=""></div>
                 </div>
+
+
+                
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
                         <p>{{ $message }}</p>
@@ -53,6 +60,35 @@
                         <button type="submit">Search</button>
                     </form>
                 </div>
+
+
+                <form class="max-w-md mx-auto">   
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                        </div>
+                        <input type="search" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required />
+                        <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="background-color : #1d4ed8">Search</button>
+                    </div>
+                </form>
+
+
+                
+                <form class="max-w-sm mx-auto mt-4">
+                <select id="category_select" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected>Choose a category</option>
+                    @foreach ($categorys as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                </select>
+                </form>
+
+
+
+
 
                 <div id="categoryFilterForm">
                     <label for="category_select">Catégorie :</label>
@@ -124,7 +160,7 @@
                 url: '/search',
                 
                 headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Pass the CSRF token
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
                 data: formData,
                 success: function(response) {
@@ -177,37 +213,46 @@
                     headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
             },
-                success: function(response) {
-                    $('#searchResults').empty();
-                    
-                    response.forEach(function(event) {
-                        console.log(event);
-                        var eventHtml = `
-                            <a href="https://laravel.com/docs" class="scale-100 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-                                <div>
-                                    <div class="h-16 w-16 bg-red-50 dark:bg-red-800/20 flex items-center justify-center rounded-full">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-7 h-7 stroke-red-500">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-                                        </svg>
-                                    </div>
-                                    <h2 class="mt-6 text-xl font-semibold text-gray-900 dark:text-white">${event.titre}</h2>
-                                    <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">${event.description}</p>
-                                    <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">${event.category.name}</p>
-                                    <form method="POST" action="{{ route('reservation.reserve', $event->id) }}" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="submit" value="Book Now" class="mt-4 px-4 py-2 bg-blue rounded-md">
-                                    </form>
+            success: function(response) {
+    $('#searchResults').empty();
+    
+    response.forEach(function(event) {
+        console.log(event);
+        var eventHtml = `
+            <div class="block rounded-lg p-4 shadow-sm shadow-indigo-100">
+                <img alt="" src="{{ asset('storage/' . $event->image )}}" class="h-56 w-full rounded-md object-cover" />
+                <div class="mt-2">
+                    <dl>
+                        <div>
+                            <dt class="sr-only">Price</dt>
+                            <dd class="text-sm text-gray-500">${event.Title}</dd>
+                        </div>
+                        <div>
+                            <dt class="sr-only">Address</dt>
+                            <dd class="font-medium">${event.lieu}</dd>
+                        </div>
+                        <div>
+                            <dt class="sr-only">Category</dt>
+                            <dd class="font-medium">${event.category ? event.category.name : 'No category'}</dd>
+                        </div>
+                    </dl>
+                </div>
+                <div class="mt-4 flex justify-between">
+                    <form method="POST" action="/reservation/reserve" enctype="multipart/form-data">
+                        <input type="hidden" name="eventId" value="${event.id}">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="submit" value="Book Now" class="px-4 py-2 bg-blue rounded-md">
+                    </form>
+                    <form method="GET" action="/events/show/${event.id}" enctype="multipart/form-data">
+                        <input type="submit" value="Read More" class="px-4 py-2 bg-blue rounded-md">
+                    </form>
+                </div>
+            </div>
+        `;
+        $('#searchResults').append(eventHtml);
+    });
+},
 
-                                    <form method="POST" action="{{ route('events.show', $event->id) }}" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="submit" value="Read More" class="mt-4 px-4 py-2 bg-blue rounded-md">
-                                    </form>
-                                </div>
-                            </a>
-                        `;
-                        $('#searchResults').append(eventHtml);
-                    });
-                },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
@@ -215,7 +260,7 @@
         });
     });
 </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 
 </body>
