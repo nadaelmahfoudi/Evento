@@ -15,8 +15,8 @@ class OrganizerSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'organizer1',
-            'email' => 'organizer1@gmail.com',
+            'name' => 'organizer2',
+            'email' => 'organizer2@gmail.com',
             'password' => Hash::make('123456'),
         ])->assignRole('organizer');
     }

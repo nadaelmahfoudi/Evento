@@ -12,7 +12,7 @@ class TicketController extends Controller
 {
     $user = Auth::user();
 
-    $reservations = Reservation::where('user_id', $user->id)->get();
+    $reservations = Reservation::where('user_id', $user->id)->where('status' , 'acceptée')->get();
     return view('tickets.ticket', ['reservations' => $reservations]);
 }
 }
